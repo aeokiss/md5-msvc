@@ -1,0 +1,75 @@
+######################################################################################
+#
+# Makefile.msvc
+#
+# Created by Hoonjoo Kang <aeokiss@gmail.com>
+#
+######################################################################################
+
+!if !defined(DEBUG)
+DEBUG=0
+!endif
+!if !defined(MFLAGS)
+MFLAGS=-MT
+!endif
+
+######################################################################################
+# 컴파일러 환경 설정
+######################################################################################
+CC = cl
+WARN_CFLAGS = -W3
+PICFLAGS =
+
+!if $(DEBUG)
+OPTIMFLAGS = /Od /EHsc /RTC1 /nologo /ZI
+DEBUGFLAGS = /D "WIN32" /D "_DEBUG" /D "_LIB" /D "_CRT_SECURE_NO_WARNINGS" /D "_MBCS"
+!else
+OPTIMFLAGS = /O2 /Oi /FD /EHsc /Gy /nologo /Zi
+DEBUGFLAGS = /D "WIN32" /D "NDEBUG" /D "_LIB" /D "_CRT_SECURE_NO_WARNINGS" /D "_MBCS"
+!endif
+
+CFLAGS = $(MFLAGS) $(WARN_CFLAGS) $(OPTIMFLAGS) $(DEBUGFLAGS)
+
+INCLUDES = -I.
+
+AR = lib
+AR_FLAGS = /out:
+
+LN = copy
+RM = -del /Q
+
+######################################################################################
+# 라이브러리 및 실행파일 설정
+######################################################################################
+LIBTITLE = md5
+LIBNAME = $(LIBTITLE).lib
+
+OBJECTS = md5c.obj
+
+all : $(OBJECTS) $(LIBNAME)
+
+######################################################################################
+# 소스 컴파일
+######################################################################################
+.c.obj :
+	$(CC) $(INCLUDES) $(CFLAGS) $(PICFLAGS) /c $*.c /Fo"$*" /Fd"$(LIBTITLE).pdb"
+
+######################################################################################
+# 라이브러리 생성
+######################################################################################
+$(LIBNAME) :
+	$(AR) $(AR_FLAGS)$(LIBNAME) $(OBJECTS) /NOLOGO /NODEFAULTLIB
+
+clean : force
+	$(RM) *.obj
+	$(RM) *.lib
+	$(RM) *.exp
+	$(RM) *.dll
+	$(RM) *.pdb
+	$(RM) *.idb
+	$(RM) *.ilk
+	$(RM) *.exe
+
+reall : clean all
+
+force :
