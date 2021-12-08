@@ -1,6 +1,6 @@
 @echo off
 
-@call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_arm
+@call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64_arm
 
 @set SrcDir=md5
 @set ResDir=res
